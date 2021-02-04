@@ -17,7 +17,8 @@
     "style-loader": "^2.0.0",
     "vue": "^2.6.11",
     "vue-particles": "^1.0.9",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "vue-upload-imgs": "^1.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

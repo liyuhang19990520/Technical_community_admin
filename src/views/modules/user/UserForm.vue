@@ -13,25 +13,21 @@
         class="demo-ruleForm"
         :disabled="method == 'view'"
       >
-        <el-form-item label="头像" prop="headImg">
-          <!-- :rules="[{ required: true, message: '请选择头像', trigger: 'blur' }]" -->
-          <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            class="avatar-uploader"
-            :show-file-list="false"
-            :headers="{ dataType: 'jsonp' }"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
+        <el-form-item
+          label="头像"
+          prop="headImg"
+          :rules="[{ required: true, message: '请选择头像', trigger: 'blur' }]"
+        >
+          <vue-upload-imgs
+            compress
+            :before-read="beforeRead"
+            :limit="1"
+            :type="0"
+            @exceed="exceed"
+            v-model="files"
+            :disabled="method == 'view' ? true : false"
           >
-            <img
-              v-if="inputForm.headImg"
-              :src="inputForm.headImg"
-              class="avatar"
-              width="100"
-              height="100"
-            />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+          </vue-upload-imgs>
         </el-form-item>
         <el-form-item
           label="用户名"
@@ -116,6 +112,7 @@
 export default {
   data() {
     return {
+      files: [],
       dialogVisible: false, //对话框显示开关
       title: "", //标题显示
       method: "", //判断是调用的场景
@@ -157,41 +154,39 @@ export default {
           }).then(({ data }) => {
             if (data && data.success) {
               this.inputForm = this.recover(this.inputForm, data.information);
+              if (this.files[0] && this.files[0].url) {
+                this.files[0].url = this.inputForm.headImg;
+              } else {
+                this.files = [];
+                var obj = { url: this.inputForm.headImg };
+                this.files.push(obj);
+              }
               // console.log(data);
             }
           });
         }
       });
     },
-    handleAvatarSuccess(res, file) {
-      this.inputForm.headImg = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
     //提交表单
     submit() {
-      this.$http({
-        url: "/save",
-        method: "post",
-        data: this.inputForm,
-      }).then(({ data }) => {
-        if (data && data.success) {
-          this.$message({
-            message: data.msg,
-            type: "success",
+      this.$refs["inputForm"].validate((result) => {
+        if (result) {
+          this.$http({
+            url: "/userSave",
+            method: "post",
+            data: this.inputForm,
+          }).then(({ data }) => {
+            if (data && data.success) {
+              this.$message({
+                message: data.msg,
+                type: "success",
+              });
+              this.dialogVisible = false;
+              this.$emit("submitSuccess");
+            } else {
+              this.$message.error(data.msg);
+            }
           });
-          this.dialogVisible = false;
-          this.$emit('submitSuccess')
         }
       });
     },
@@ -199,6 +194,37 @@ export default {
     closed() {
       this.$refs["inputForm"].resetFields();
       Object.assign(this.$data, this.$options.data());
+    },
+    //如果超出数量限制提醒用户
+    exceed() {
+      alert(`只能上传1张图片`);
+    },
+    //上传前判断图片类型
+    beforeRead(files) {
+      for (let i = 0, len = files.length; i < len; i++) {
+        const file = files[i];
+        if (file.type != "image/jpeg" && file.type != "image/png") {
+          alert("只能上传jpg和png格式的图片");
+          return false;
+        }
+      }
+
+      return true;
+    },
+  },
+  watch: {
+    //更新表单的字段
+    files: {
+      handler() {
+        //这个方法名就是为了输出新值和旧值，只要改变就触发
+        if (this.files[0] && this.files[0].url) {
+          this.inputForm.headImg = this.files[0].url;
+        } else {
+          this.inputForm.headImg = "";
+        }
+      },
+      immediate: true, //当这个属性true时输出刚开始的新值和旧值
+      deep: true, //当这个属性为true时对象的属性发生变化也可以监听到
     },
   },
 };

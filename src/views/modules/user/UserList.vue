@@ -66,7 +66,7 @@
     </el-form>
 
     <el-button
-      @click="$refs['UserList'].init('add', '')"
+      @click="$refs['UserForm'].init('add', '')"
       type="success"
       style="margin-bottom: 20px"
       >添加</el-button
@@ -104,13 +104,13 @@
           <el-button
             type="text"
             size="small"
-            @click="$refs['UserList'].init('view', scope.row._id)"
+            @click="$refs['UserForm'].init('view', scope.row._id)"
             >查看</el-button
           >
           <el-button
             type="text"
             size="small"
-            @click="$refs['UserList'].init('edit', scope.row._id)"
+            @click="$refs['UserForm'].init('edit', scope.row._id)"
             >修改</el-button
           >
           <el-button type="text" size="small" @click="del(scope.row.username)"
@@ -129,12 +129,12 @@
       :total="total"
     >
     </el-pagination>
-    <UserList ref="UserList" @submitSuccess="submitSuccess" />
+    <UserForm ref="UserForm" @submitSuccess="submitSuccess" />
   </div>
 </template>
 
 <script>
-import UserList from "./UserForm";
+import UserForm from "./UserForm";
 export default {
   data() {
     return {
@@ -152,7 +152,7 @@ export default {
     };
   },
   components: {
-    UserList,
+    UserForm,
   },
   mounted() {
     this.requestList();

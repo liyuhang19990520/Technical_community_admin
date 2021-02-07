@@ -3,7 +3,7 @@
     <el-dialog
       :title="title"
       :visible.sync="dialogVisible"
-      width="25%"
+      width="30%"
       @closed="closed"
     >
       <el-form
@@ -13,7 +13,54 @@
         class="demo-ruleForm"
         :disabled="method == 'view'"
       >
-        <el-form-item label="公告时间" prop="time">
+        <el-form-item
+          label="评论id"
+          prop="_id"
+          label-width="170px"
+          :rules="[
+            { required: true, message: '请输入公告内容', trigger: 'blur' },
+          ]"
+        >
+          <el-input
+            v-model="inputForm._id"
+            resize="none"
+            style="width: 280px"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="评论内容"
+          prop="cont"
+          label-width="170px"
+          :rules="[
+            { required: true, message: '请输入公告内容', trigger: 'blur' },
+          ]"
+        >
+          <el-input
+            v-model="inputForm.cont"
+            :autosize="{ minRows: 2, maxRows: 6 }"
+            resize="none"
+            :rows="4"
+            style="width: 280px"
+            type="textarea"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="评论者用户"
+          prop="username"
+          label-width="170px"
+          :rules="[
+            { required: true, message: '请输入公告内容', trigger: 'blur' },
+          ]"
+        >
+          <el-input
+            v-model="inputForm.username"
+            resize="none"
+            style="width: 280px"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="评论时间" prop="time" label-width="170px">
           <el-date-picker
             v-model="inputForm.time"
             type="datetime"
@@ -24,29 +71,9 @@
           >
           </el-date-picker>
         </el-form-item>
-
-        <el-form-item
-          label="公告内容"
-          prop="cont"
-          :rules="[
-            { required: true, message: '请输入公告内容', trigger: 'blur' },
-          ]"
-        >
-          <el-input
-            v-model="inputForm.cont"
-            :autosize="{ minRows: 2, maxRows: 6 }"
-            resize="none"
-            :rows="4"
-            style="width: 250px"
-            type="textarea"
-          ></el-input>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit()" v-if="method != 'view'"
-          >确 定</el-button
-        >
       </span>
     </el-dialog>
   </div>
@@ -65,6 +92,7 @@ export default {
         _id: "",
         time: "",
         cont: "",
+        username: "",
       },
     };
   },
@@ -86,7 +114,7 @@ export default {
         if (method == "view" || method == "edit") {
           //修改或查看
           this.$http({
-            url: "/noticesDetail",
+            url: "/commentDetail",
             method: "get",
             params: {
               id,
@@ -95,29 +123,6 @@ export default {
             if (data && data.success) {
               this.inputForm = this.recover(this.inputForm, data.information);
               // console.log(data);
-            }
-          });
-        }
-      });
-    },
-    //提交表单
-    submit() {
-      this.$refs["noticesForm"].validate((result) => {
-        if (result) {
-          this.$http({
-            url: "/noticesSave",
-            method: "post",
-            data: this.inputForm,
-          }).then(({ data }) => {
-            if (data && data.success) {
-              this.$message({
-                message: data.msg,
-                type: "success",
-              });
-              this.dialogVisible = false;
-              this.$emit("submitSuccess");
-            } else {
-              this.$message.error(data.msg);
             }
           });
         }

@@ -3,44 +3,23 @@
     <el-form ref="searchForm" :model="searchForm" label-width="80px">
       <el-row>
         <el-col :span="5">
-          <el-form-item label="用户名" label-width="80px" prop="username">
+          <el-form-item label="内容(模糊)" label-width="80px" prop="cont">
             <el-input
-              v-model="searchForm.username"
+              v-model="searchForm.cont"
               style="width: 220px"
               clearable
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="5">
-          <el-form-item label="昵称" label-width="50px" prop="nickname">
-            <el-input
-              v-model="searchForm.nickname"
-              style="width: 220px"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="5">
-          <el-form-item label="性别" label-width="50px" prop="sex">
-            <el-select
-              v-model="searchForm.sex"
-              placeholder="请选择性别"
-              style="width: 200px"
-              clearable
-            >
-              <el-option label="男" value="男"> </el-option>
-              <el-option label="女" value="女"> </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="5">
-          <el-form-item label="生日" label-width="50px" prop="birth">
+        <el-col :span="8">
+          <el-form-item label="公告时间" label-width="70px" prop="time">
             <el-date-picker
-              v-model="searchForm.birth"
-              type="datetime"
-              format="yyyy-MM-dd"
-              placeholder="选择生日"
-              style="width: 200px"
+              :picker-options="pickerOptions"
+              v-model="searchForm.time"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
             >
             </el-date-picker>
           </el-form-item>
@@ -64,7 +43,7 @@
     </el-form>
 
     <el-button
-      @click="$refs['UserList'].init('add', '')"
+      @click="$refs['niticesForm'].init('add', '')"
       type="success"
       style="margin-bottom: 20px"
       >添加</el-button
@@ -94,13 +73,13 @@
           <el-button
             type="text"
             size="small"
-            @click="$refs['UserList'].init('view', scope.row._id)"
+            @click="$refs['niticesForm'].init('view', scope.row._id)"
             >查看</el-button
           >
           <el-button
             type="text"
             size="small"
-            @click="$refs['UserList'].init('edit', scope.row._id)"
+            @click="$refs['niticesForm'].init('edit', scope.row._id)"
             >修改</el-button
           >
           <el-button type="text" size="small" @click="del(scope.row._id)"
@@ -119,7 +98,7 @@
       :total="total"
     >
     </el-pagination>
-    <NoticesForm ref="UserList" @submitSuccess="submitSuccess" />
+    <NoticesForm ref="niticesForm" @submitSuccess="submitSuccess" />
   </div>
 </template>
 
@@ -128,16 +107,45 @@ import NoticesForm from "./NoticesForm";
 export default {
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
       noticeDataList: [], //列表信息
       total: 0, //总数据数
       pageNumber: 1, //页数
       branchesNumber: 10, //条数
       loading: false,
       searchForm: {
-        username: "",
-        nickname: "",
-        sex: "",
-        birth: "",
+        cont: "",
+        time: null,
       },
     };
   },
@@ -179,6 +187,7 @@ export default {
     },
     //修改成功刷新列表
     submitSuccess() {
+      console.log(1);
       this.requestList();
     },
     //删除信息
@@ -191,7 +200,7 @@ export default {
       })
         .then(() => {
           this.$http({
-            url: "/userDel",
+            url: "/niticesDel",
             method: "get",
             params: {
               _id,
@@ -213,6 +222,7 @@ export default {
     //重置
     replacement() {
       this.$refs["searchForm"].resetFields(); //重置表单
+      this.searchForm.time = null;
       this.requestList();
     },
   },

@@ -27,11 +27,11 @@
               <i class="el-icon-menu"></i>
               <span slot="title">社区帖管理</span>
             </el-menu-item>
-            <el-menu-item index="/plate">
-              <i class="el-icon-menu"></i>
-              <span slot="title">板块管理</span>
-            </el-menu-item>
           </el-submenu>
+          <el-menu-item index="/personal">
+            <i class="el-icon-menu"></i>
+            <span slot="title">个人中心</span>
+          </el-menu-item>
           <el-menu-item index="/notices">
             <i class="el-icon-menu"></i>
             <span slot="title">公告管理</span>
@@ -54,10 +54,10 @@ export default {
   },
   watch: {
     //监听路由保持高亮
-    "$route": {
+    $route: {
       handler(newVal) {
         //这个方法名就是为了输出新值和旧值，只要改变就触发
-        this.defaultActive = newVal.path
+        this.defaultActive = newVal.path;
       },
       immediate: true, //当这个属性true时输出刚开始的新值和旧值
       deep: true, //当这个属性为true时对象的属性发生变化也可以监听到
@@ -70,7 +70,7 @@ export default {
   width: 200px;
   padding-top: 20px;
 }
-.el-col{
+.el-col {
   overflow: hidden;
 }
 </style>

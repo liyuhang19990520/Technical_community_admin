@@ -318,4 +318,6 @@ var isPass = (rule, value, callback) => {
   }
 }
 
+
+
 export default { isAlphabets, isPass,isCardId, istwoNull, isChinese, isChineseChar, ip, isFloatGteZero, isNum, stringCheck, isDigits, isEmail, isEnglish, isFloat, isWord, isFloatEqZero, isFloatGtZero, isFloatLtZero, isFloatLteZero, isFloatNEqZero, isIntEqZero, isIntGtZero, isIntGteZero, isIntLtZero, isIntLteZero, isIntNEqZero, isInteger, isLowerCase, isMobile, isName, isNull, isNumber, isPhone, isPlateNo, isPwd, isQq, isRightfulString, isTel, isURL, isUpperCase, isZipCode }

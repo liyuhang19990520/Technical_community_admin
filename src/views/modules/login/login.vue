@@ -139,7 +139,37 @@ export default {
         if (valid) {
           if (this.inputForm.captcha == this.identifyCode) {
             this.loading = true;
-            alert('登陆成功')
+            this.$http({
+              url: "/adminlogin",
+              method: "post",
+              data: {
+                username: this.inputForm.username,
+                pass: this.inputForm.password,
+              },
+            }).then(({ data }) => {
+              if (data && data.success) {
+                this.$message({
+                  showClose: true,
+                  message: data.msg,
+                  type: "success",
+                });
+                this.$store.commit('setState',data.information)
+                this.$router.push({
+                  path: "/home",
+                });
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: data.msg,
+                  type: "error",
+                });
+                this.loading = false;
+
+
+
+
+              }
+            });
           } else {
             this.$message({
               showClose: true,
@@ -155,5 +185,5 @@ export default {
 </script>
 
 <style>
-  @import "~@/assets/scss/login.scss";
+@import "~@/assets/scss/login.scss";
 </style>

@@ -1,17 +1,21 @@
 <template>
   <div class="header">
     <div>
-      <img
-        src="https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3363295869,2467511306&fm=26&gp=0.jpg"
-        alt=""
-      />
+      <img :src="$store.state.headImg" alt="" />
       <span>技术社区管理平台</span>
     </div>
-    <el-button size='small'>退出</el-button>
+    <el-button size="small" @click="exit()">退出</el-button>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  methods: {
+    exit() {
+      this.$store.commit("setState", {});
+      this.$router.push({ path: "/login" });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .header {
@@ -22,7 +26,7 @@ export default {};
   > div {
     display: flex;
     align-items: center;
-    span{
+    span {
       margin-left: 10px;
       font-size: 20px;
       font-weight: 800;

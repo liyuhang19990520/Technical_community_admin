@@ -9,6 +9,7 @@ import moment from 'moment'
 import utils from '@/utils'
 import validator from '@/utils/validator'
 import VueUploadImgs from 'vue-upload-imgs'
+import store from '@/store'
 
 moment.locale('zh-cn');
 Vue.use(VueParticles)
@@ -25,5 +26,6 @@ Vue.prototype.validator = validator
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')

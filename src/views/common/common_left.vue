@@ -11,25 +11,25 @@
           router
         >
           <el-menu-item index="/user">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-user-solid"></i>
             <span slot="title">用户管理</span>
           </el-menu-item>
           <el-submenu index="1">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i class="el-icon-notebook-2"></i>
               <span>帖子管理</span>
             </template>
             <el-menu-item index="/skillposts">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-collection"></i>
               <span slot="title">技术贴管理</span>
             </el-menu-item>
             <el-menu-item index="/posts">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-receiving"></i>
               <span slot="title">社区帖管理</span>
             </el-menu-item>
           </el-submenu>
           <el-menu-item index="/personal">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-s-home"></i>
             <span slot="title">个人中心</span>
           </el-menu-item>
           <el-menu-item index="/notices">
@@ -37,7 +37,7 @@
             <span slot="title">公告管理</span>
           </el-menu-item>
           <el-menu-item index="/comments">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-s-comment"></i>
             <span slot="title">评论管理</span>
           </el-menu-item>
         </el-menu>

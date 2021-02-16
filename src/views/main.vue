@@ -15,7 +15,30 @@
           <el-breadcrumb-item :to="{ path: '/welcome' }"
             >首页</el-breadcrumb-item
           >
-          <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="$route.path == '/user'"
+            >用户管理</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/skillposts'"
+            >帖子管理</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/posts'"
+            >帖子管理</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/skillposts'"
+            >技术贴管理</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/posts'"
+            >社区贴管理</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/personal'"
+            >个人中心</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/notices'"
+            >公告管理</el-breadcrumb-item
+          >
+          <el-breadcrumb-item v-if="$route.path == '/comments'"
+            >评论管理</el-breadcrumb-item
+          >
         </el-breadcrumb>
         <MainCenter />
       </el-main>
@@ -63,7 +86,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    box-shadow:  0px 1px 2px rgba(0, 0, 0, .3);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
     z-index: 100;
   }
 }

@@ -1,82 +1,25 @@
 <template>
   <div>
-    <el-form ref="searchForm" :model="searchForm" label-width="80px">
-      <el-row>
-        <el-col :span="5">
-          <el-form-item label="发帖用户" label-width="70px" prop="postUser">
-            <el-input
-              v-model="searchForm.postUser"
-              style="width: 220px"
-              placeholder="请输入发贴用户名"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="5">
-          <el-form-item label="帖子标题" label-width="70px" prop="postTitle">
-            <el-input
-              v-model="searchForm.postTitle"
-              style="width: 220px"
-              placeholder="请输入帖子标题(模糊)"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="5">
-          <el-form-item label="帖子内容" label-width="70px" prop="postCont">
-            <el-input
-              v-model="searchForm.postCont"
-              style="width: 220px"
-              placeholder="请输入帖子内容(模糊)"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="7">
-          <el-form-item label="公告时间" label-width="70px" prop="postTime">
-            <el-date-picker
-              :picker-options="pickerOptions"
-              v-model="searchForm.postTime"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            >
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-button
-            type="primary"
-            style="margin-bottom: 20px"
-            @click="requestList()"
-            size="small"
-            >查询</el-button
-          >
-          <el-button
-            style="margin-bottom: 20px"
-            @click="replacement()"
-            size="small"
-            >重置</el-button
-          >
-        </el-col>
-      </el-row>
-    </el-form>
-
     <el-table
       border
       style="width: 100%"
       :data="PostsDataList"
       v-loading="loading"
     >
-      <el-table-column label="帖子id" align="center" prop="_id">
+      <el-table-column label="帖子id" align="center" prop="id">
       </el-table-column>
       <el-table-column label="发帖人用户名" align="center" prop="postUser">
       </el-table-column>
       <el-table-column label="帖子标题" align="center" prop="postTitle">
       </el-table-column>
       <el-table-column label="帖子内容" align="center" prop="postCont">
+      </el-table-column>
+      <el-table-column
+        label="所属板块"
+        align="center"
+        prop="plate.name"
+        width="90px"
+      >
       </el-table-column>
       <el-table-column label="内容图片" align="center">
         <template slot-scope="scope">
@@ -98,10 +41,31 @@
           <el-button
             type="text"
             size="small"
-            @click="$refs['postsform'].init('view', scope.row._id)"
+            @click="
+              $refs['SkillPostsForm'].init(
+                'view',
+                scope.row.plate.id,
+                scope.row.id
+              )
+            "
             >查看</el-button
           >
-          <el-button type="text" size="small" @click="del(scope.row._id)"
+          <el-button
+            type="text"
+            size="small"
+            @click="
+              $refs['SkillPostsForm'].init(
+                'edit',
+                scope.row.plate.id,
+                scope.row.id
+              )
+            "
+            >修改</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            @click="del(scope.row.plate.id, scope.row.id)"
             >删除</el-button
           >
         </template>
@@ -117,7 +81,7 @@
       :total="total"
     >
     </el-pagination>
-    <SkillPostsForm ref="postsform" @submitSuccess="submitSuccess" />
+    <SkillPostsForm ref="SkillPostsForm" @submitSuccess="submitSuccess" />
   </div>
 </template>
 
@@ -181,7 +145,7 @@ export default {
     requestList() {
       this.loading = true;
       this.$http({
-        url: "/postsList",
+        url: "/SkillPostsList",
         method: "post",
         data: {
           pageNumber: this.pageNumber,
@@ -211,7 +175,7 @@ export default {
       this.requestList();
     },
     //删除信息
-    del(id) {
+    del(plate, id) {
       this.$confirm("此操作将永久删除此账号?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -219,9 +183,10 @@ export default {
       })
         .then(() => {
           this.$http({
-            url: "/postsDel",
+            url: "/skillPostsDel",
             method: "get",
             params: {
+              plate,
               id,
             },
           }).then(({ data }) => {

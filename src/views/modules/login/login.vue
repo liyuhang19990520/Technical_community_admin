@@ -86,7 +86,7 @@ export default {
     return {
       time: "",
       logo: "",
-      productName: "技术社区管理平台",
+      productName: "后台管理平台",
       loading: false,
       inputForm: {
         username: "",

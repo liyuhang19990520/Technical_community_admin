@@ -17,7 +17,7 @@
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-notebook-2"></i>
-              <span>帖子管理</span>
+              <span>商品管理</span>
             </template>
             <el-menu-item index="/skillposts">
               <i class="el-icon-collection"></i>
@@ -30,15 +30,15 @@
           </el-submenu>
           <el-menu-item index="/personal">
             <i class="el-icon-s-home"></i>
-            <span slot="title">个人中心</span>
+            <span slot="title">订单管理</span>
           </el-menu-item>
           <el-menu-item index="/notices">
             <i class="el-icon-menu"></i>
-            <span slot="title">公告管理</span>
+            <span slot="title">分类管理</span>
           </el-menu-item>
           <el-menu-item index="/comments">
             <i class="el-icon-s-comment"></i>
-            <span slot="title">评论管理</span>
+            <span slot="title">数据展示</span>
           </el-menu-item>
         </el-menu>
       </el-col>

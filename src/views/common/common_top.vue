@@ -2,7 +2,7 @@
   <div class="header">
     <div>
       <img :src="$store.state.headImg" alt="" />
-      <span>技术社区管理平台</span>
+      <span>后台管理平台</span>
     </div>
     <el-button size="small" @click="exit()">退出</el-button>
   </div>
